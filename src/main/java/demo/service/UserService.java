@@ -3,6 +3,9 @@ package demo.service;
 import demo.dao.UserDAO;
 import demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +15,7 @@ import java.util.Set;
 
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserDAO userDAO;
 
@@ -45,6 +48,21 @@ public class UserService {
 
     public User getUserByUsername(String email) {
         return userDAO.getUserByUsername(email);
+    }
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        User user = userDAO.getUserByUsername(userName);
+        if (user == null) {
+            throw new UsernameNotFoundException("Unknown user: " + userName);
+        }
+
+        UserDetails userDetails =
+                org.springframework.security.core.userdetails.User.builder()
+                        .username(user.getUsername())
+                        .password(user.getPassword())
+                        .authorities(user.getAuthorities())
+                        .build();
+        return userDetails;
     }
 
 }
