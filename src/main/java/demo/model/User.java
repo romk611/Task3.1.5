@@ -1,6 +1,8 @@
 package demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -31,7 +33,8 @@ public class User implements UserDetails {
     @Min(value = 0)
     private Byte age;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH)
+    @Fetch(value = FetchMode.JOIN)
     private Set<Role> roles;
 
     public User(String email, String password, String name, String lastName, Byte age) {
