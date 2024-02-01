@@ -15,11 +15,9 @@ public class Role implements GrantedAuthority{
     public static final Role NOBODY = new Role();
 
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name")
     private String name;
 
     @JsonIgnore

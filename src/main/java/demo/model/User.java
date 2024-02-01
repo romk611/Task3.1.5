@@ -16,23 +16,18 @@ public class User implements UserDetails {
     public static final User NOBODY = new User();
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email", unique = true)
+    @Column(unique = true)
     private String email;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "age")
     @Min(value = 0)
     private Byte age;
 
