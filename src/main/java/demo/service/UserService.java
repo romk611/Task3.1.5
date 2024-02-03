@@ -1,68 +1,19 @@
 package demo.service;
 
-import demo.dao.UserDAO;
 import demo.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.List;
-import java.util.Set;
 
+public interface UserService {
+    List<User> getAllUser();
 
-@Service
-public class UserService implements UserDetailsService {
+    User getUserById(long id);
 
-    private final UserDAO userDAO;
+    void saveUser(User user);
 
-    public UserService(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
+    void editUser(User user);
 
-    public Set<User> getAllUser() {
-        return userDAO.getAllUser();
-    }
+    void deleteUser(long id);
 
-    public User getUserById(long id) {
-        return userDAO.getUserById(id);
-    }
-
-    @Transactional
-    public void saveUser(User user) {
-        userDAO.saveUser(user);
-    }
-
-    @Transactional
-    public void editUser(User user) {
-        userDAO.editUser(user);
-    }
-
-    @Transactional
-    public void deleteUser(long id) {
-        userDAO.deleteUser(id);
-    }
-
-    public User getUserByUsername(String email) {
-        return userDAO.getUserByUsername(email);
-    }
-    @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userDAO.getUserByUsername(userName);
-        if (user == null) {
-            throw new UsernameNotFoundException("Unknown user: " + userName);
-        }
-
-        UserDetails userDetails =
-                org.springframework.security.core.userdetails.User.builder()
-                        .username(user.getUsername())
-                        .password(user.getPassword())
-                        .authorities(user.getAuthorities())
-                        .build();
-        return userDetails;
-    }
-
+    User getUserByUsername(String email);
 }

@@ -6,9 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class UserDAOHibernateImpl implements UserDAO {
@@ -17,10 +15,8 @@ public class UserDAOHibernateImpl implements UserDAO {
     private EntityManager entityManager;
 
     @Override
-    public Set<User> getAllUser() {
-        List<User> userList = entityManager.createQuery("select u from User u", User.class).getResultList();
-        Set<User> userSet = new HashSet<>(userList);
-        return userSet;
+    public List<User> getAllUser() {
+        return entityManager.createQuery("select u from User u", User.class).getResultList();
     }
 
     @Override
@@ -48,9 +44,8 @@ public class UserDAOHibernateImpl implements UserDAO {
         try {
             TypedQuery<User> query = entityManager.createQuery(
                     "SELECT u FROM User u WHERE u.email = :login", User.class);
-            User user = query.setParameter("login", email)
+            return query.setParameter("login", email)
                     .getSingleResult();
-            return user;
         } catch (Exception e) {
             return User.NOBODY;
         }

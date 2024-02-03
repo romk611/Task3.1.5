@@ -2,16 +2,13 @@ package demo.controllers;
 
 import demo.model.User;
 import demo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @RequestMapping("/api")
 @RestController
@@ -28,7 +25,7 @@ public class AdminsRestController {
 
 
     @GetMapping("/users")
-    public ResponseEntity <Set<User>> getAllUsers() {
+    public ResponseEntity <List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
     }
 
@@ -39,13 +36,14 @@ public class AdminsRestController {
 
     @PutMapping("/users")
     public ResponseEntity <User> update(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.editUser(user);
         return new ResponseEntity<> (user, HttpStatus.OK);
     }
 
     @PostMapping("/users")
     public ResponseEntity <User> newUser(@RequestBody @Valid User user) {
-        if (user.getRoles().size() == 0) {
+        if (user.getRoles().isEmpty()) {
             return new ResponseEntity<> (user, HttpStatus.OK);
         }
         if (userService.getUserByUsername(user.getEmail()) == User.NOBODY) {
