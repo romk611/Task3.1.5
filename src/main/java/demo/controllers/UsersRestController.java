@@ -1,7 +1,6 @@
 package demo.controllers;
 
 import demo.model.User;
-import demo.service.RoleService;
 import demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,12 +16,9 @@ public class UsersRestController {
 
 
     private final UserService userService;
-    private final RoleService roleService;
-
     @Autowired
-    public UsersRestController(UserService userService, RoleService roleService) {
+    public UsersRestController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
     }
 
     @GetMapping

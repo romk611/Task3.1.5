@@ -2,7 +2,6 @@ package demo.controllers;
 
 
 import demo.model.User;
-import demo.service.RoleService;
 import demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,12 +15,10 @@ import java.security.Principal;
 public class UsersControllers {
 
     private final UserService userService;
-    private final RoleService roleService;
 
     @Autowired
-    public UsersControllers(UserService userService, RoleService roleService) {
+    public UsersControllers(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
     }
 
     @GetMapping("/")
